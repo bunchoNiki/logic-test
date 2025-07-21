@@ -9,6 +9,7 @@ export default defineConfig([
     files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
     plugins: { js },
     extends: ["js/recommended"],
+    ignores: ["*.config.*"],
     rules: {
       "no-var": "error",
       "max-len": [
@@ -19,7 +20,7 @@ export default defineConfig([
         }
       ],
       "no-console": ["warn"],
-      "semi": ["error", "always"]
+      "semi": ["error", "always"],
     }
   },
   { files: ["**/*.{js,mjs,cjs,ts,mts,cts}"], languageOptions: { globals: globals.browser } },
