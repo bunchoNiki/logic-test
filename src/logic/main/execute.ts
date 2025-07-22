@@ -1,5 +1,5 @@
-export const main = () => {
-  return 'test';
+export const main = (): void => {
+  console.log('set up completed');
 };
 
 main();
