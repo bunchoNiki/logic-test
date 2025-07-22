@@ -1,5 +1,19 @@
 # logic-test
 
+## 環境構築手順
+1. nodeのインストール v22^系
+   [node](https://nodejs.org/ja/download)
+2. npm ライブラリのインストール
+   ```
+   $ > npm install
+   ```
+3. 起動確認
+   ```
+   $ > npm run node:run
+   >> set up completed!
+   ```
+
+
 ## 運用ルール
 
 
