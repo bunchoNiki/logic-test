@@ -1,11 +1,20 @@
 import { FOUR_OF_A_KIND, FULL_HOUSE, HIGH_CARD, ONE_PAIR, STRAIGHT, THREE_OF_A_KIND, TWO_PAIR } from "./constants";
 
-const HAND_TYPE: Record<number, string> = {
-  [5]: HIGH_CARD,
+const HAND_TYPE = {
   [4]: ONE_PAIR,
   [3]: TWO_PAIR,
   [2]: FULL_HOUSE,
 };
+
+/**
+ * 役を保持するobjectのキーかの判定.
+ * @param num keyかもしれない数値
+ * @returns boolean 
+ */
+const isHandTypeKeys = (num: number): num is keyof typeof HAND_TYPE => {
+  return num in HAND_TYPE;
+};
+
 /**
   ストレート → 数字が連続している
   4カード   → 5枚中4枚同一の数字
@@ -27,22 +36,28 @@ const HAND_TYPE: Record<number, string> = {
   【条件】
 **/
 export const main = (hand: string): string => {
-  if (/(\d)\1{3}/.test(hand)) {
-    return FOUR_OF_A_KIND;
-  }
 
   const arr = hand.split('').map(Number).sort();
   const set = new Set(arr);
 
-  if (set.size === 3 && /(\d)\1{2}/.test(hand)) {
+  if (/(\d)\1{3}/.test(arr.join(''))) {
+    return FOUR_OF_A_KIND;
+  }
+
+  if (set.size === 3 && /(\d)\1{2}/.test(arr.join(''))) {
     return THREE_OF_A_KIND;
   }
 
-  if (set.size === 5 && arr[0] * 5 + 10 === arr.reduce((n, h) => n + h, 0)) {
+  if (isHandTypeKeys(set.size)) {
+    return HAND_TYPE[set.size];  
+  }
+
+  // ストレートは最小値の合算値なので15~段階的に5増えた値となる
+  if (arr[0] * 5 + 10 === arr.reduce((n, h) => n + h, 0)) {
     return STRAIGHT;
   }
 
-  return HAND_TYPE[set.size];
+  return HIGH_CARD;
 };
 
 
