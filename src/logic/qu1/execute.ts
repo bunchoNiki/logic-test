@@ -6,6 +6,10 @@ const HAND_TYPE = {
   [2]: FULL_HOUSE,
 };
 
+const STRAIGHT_DIFF = 4;
+const FST_INDEX = 0;
+const LAST_INDEX = 4;
+
 /**
  * 役を保持するobjectのキーかの判定.
  * @param num keyかもしれない数値
@@ -36,7 +40,6 @@ const isHandTypeKeys = (num: number): num is keyof typeof HAND_TYPE => {
   【条件】
 **/
 export const main = (hand: string): string => {
-
   const arr = hand.split('').map(Number).sort();
   const set = new Set(arr);
 
@@ -48,13 +51,12 @@ export const main = (hand: string): string => {
     return THREE_OF_A_KIND;
   }
 
-  if (isHandTypeKeys(set.size)) {
-    return HAND_TYPE[set.size];  
+  if (set.size === 5 && arr[LAST_INDEX] - arr[FST_INDEX] === STRAIGHT_DIFF) {
+    return STRAIGHT;
   }
 
-  // ストレートは最小値の合算値なので15~段階的に5増えた値となる
-  if (arr[0] * 5 + 10 === arr.reduce((n, h) => n + h, 0)) {
-    return STRAIGHT;
+  if (isHandTypeKeys(set.size)) {
+    return HAND_TYPE[set.size];  
   }
 
   return HIGH_CARD;
