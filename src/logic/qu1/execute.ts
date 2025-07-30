@@ -7,6 +7,8 @@ const HAND_TYPE = {
 };
 
 const STRAIGHT_DIFF = 4;
+const FOUR_OF_A_KIND_DIFF_LENGTH = 4;
+const THREE_OF_A_KIND_DIFF_LENGTH = 3;
 const FST_INDEX = 0;
 const LAST_INDEX = 4;
 
@@ -27,25 +29,23 @@ const isHandTypeKeys = (num: number): num is keyof typeof HAND_TYPE => {
 export const main = (hand: string): string => {
   const arr = hand.split('').map(Number).sort();
   const set = new Set(arr);
+  const diff = hand.length - hand.replaceAll(String(arr[2]), '').length;
 
-  if (/(\d)\1{3}/.test(arr.join(''))) {
+  if (set.size === 2 && diff === FOUR_OF_A_KIND_DIFF_LENGTH) {
     return FOUR_OF_A_KIND;
   }
 
-  if (set.size === 3 && /(\d)\1{2}/.test(arr.join(''))) {
+  if (set.size === 3 && diff === THREE_OF_A_KIND_DIFF_LENGTH) {
     return THREE_OF_A_KIND;
-  }
-
-  if (set.size === 5 && arr[LAST_INDEX] - arr[FST_INDEX] === STRAIGHT_DIFF) {
-    return STRAIGHT;
   }
 
   if (isHandTypeKeys(set.size)) {
     return HAND_TYPE[set.size];  
   }
 
-  return HIGH_CARD;
+  return set.size === 5 && arr[LAST_INDEX] - arr[FST_INDEX] === STRAIGHT_DIFF
+   ? STRAIGHT
+   : HIGH_CARD;
 };
-
 
 main('13535');
