@@ -1,4 +1,4 @@
-export type DuplicationInfo = {
-  card: number;
-  piece: number;
+export type CardCount = {
+  number: number;
+  count: number;
 }
