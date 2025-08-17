@@ -59,20 +59,16 @@ const judgeRole = (
   numberArray: number[]
 ): string => {
   const { hasFour, hasThree, pairCount } = duplicatingKinds;
-
   // 役に必要なcountが多い役から判定
   if (hasFour) {
     return FOUR_OF_A_KIND;
   }
   if (hasThree) {
     // フルハウスの判定が先
-    return pairCount === 1 ? FULL_HOUSE : THREE_OF_A_KIND;
+    return pairCount ? FULL_HOUSE : THREE_OF_A_KIND;
   }
-  if (hasFour) {
-    return TWO_PAIR;
-  }
-  if (pairCount === 1) {
-    return ONE_PAIR;
+  if (pairCount) {
+    return pairCount === 2 ? TWO_PAIR : ONE_PAIR;
   }
 
   const sorted: number[] = [...numberArray].sort((a, b) => a - b);
