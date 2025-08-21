@@ -1,4 +1,4 @@
 export type CardCount = {
-  number: number;
+  cardNumber: number;
   count: number;
 }

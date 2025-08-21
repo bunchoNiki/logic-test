@@ -1,4 +1,4 @@
-import { FIRST_INDEX, FOUR_OF_A_KIND, FULL_HOUSE, COUNT_OF_FOUR, HIGH_CARD, INPUT_ERROR, ONE_PAIR, COUNT_OF_ONE, STRAIGHT, STRAIGHT_DIFFERENCE, THREE_OF_A_KIND, COUNT_OF_THREE, TWO_PAIR, COUNT_OF_TWO, VALIDATION_CHECK_REG_EXP } from "./constants";
+import { FIRST_INDEX, FOUR_OF_A_KIND, FULL_HOUSE, COUNT_OF_FOUR, HIGH_CARD, INPUT_ERROR, ONE_PAIR, COUNT_OF_ONE, STRAIGHT, STRAIGHT_DIFFERENCE, THREE_OF_A_KIND, COUNT_OF_THREE, TWO_PAIR, COUNT_OF_TWO, VALIDATION_CHECK_REG_EXP, NOT_FOUNT_INDEX } from "./constants";
 import { CardCount } from "./types";
 
 /**
@@ -22,18 +22,12 @@ const isStraight = (sortedHandArray: number[]): boolean => {
  */
 const getCardCounts = (sortedHandArray: number[]): CardCount[] => {
   return sortedHandArray.reduce((cardCounts, cardNumber) => {
-    const cardCountIndex = cardCounts.findIndex(info => info.number === cardNumber);
-    if (cardCountIndex !== -1) {
-      cardCounts[cardCountIndex].count++;
-      return cardCounts;
+    const cardCountIndex = cardCounts.findIndex(info => info.cardNumber === cardNumber);
+    if (cardCountIndex === NOT_FOUNT_INDEX) {
+      return [...cardCounts, { cardNumber, count: COUNT_OF_ONE }];
     };
-    return [
-      ...cardCounts,
-      {
-        number: cardNumber,
-        count: COUNT_OF_ONE
-      }
-    ];
+    cardCounts[cardCountIndex].count++;
+    return cardCounts;
   }, [] as CardCount[]);
 };
 
@@ -44,8 +38,7 @@ const getCardCounts = (sortedHandArray: number[]): CardCount[] => {
  */
 const judgeRoleDuplication = (cardCounts: CardCount[]): string => {
   const counts = cardCounts.map(info => info.count).sort((a, b) => b - a);
-  const primaryCount = counts[0];
-  const secondaryCount = counts[1];
+  const [primaryCount, secondaryCount] = counts;
 
   if (primaryCount === COUNT_OF_FOUR) {
     return FOUR_OF_A_KIND;

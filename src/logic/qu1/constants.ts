@@ -13,3 +13,4 @@ export const COUNT_OF_TWO = 2;
 export const COUNT_OF_THREE = 3;
 export const COUNT_OF_FOUR = 4;
 export const STRAIGHT_DIFFERENCE = 1;
+export const NOT_FOUNT_INDEX = -1;
