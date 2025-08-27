@@ -13,7 +13,7 @@ describe('ヴィジュネル暗号 - 暗号化', () => {
 describe.skip('ヴィジュネル暗号 - 復号', () => {
   test.each(testCases)(
     '$name の場合、正しく復号されること',
-    ({ text, key: expected, expected: key }) => {
+    ({ text: expected, key, expected: text }) => {
       expect(main(text, key, decrypt)).toBe(expected);
     }
   );
