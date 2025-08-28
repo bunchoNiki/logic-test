@@ -5,7 +5,7 @@ import { BowlingFrames, FINAL_FRAME, FinalFrame, NOT_THROW_BASE_SCORE, NEXT_FRAM
  * @param {RegularFrame | FinalFrame} frame 各フレームのスコア
  * @param {number} index 現フレーム
  * @param {BowlingFrames} frames すべてのフレームのスコア
- * @returns {number} ストライクかどうか
+ * @returns {number} 現フレームのみのスコア
  */
 const scoreCalculationOfFrame = (frame: RegularFrame | FinalFrame, index: number, frames: BowlingFrames): number => {
   const [firstThrow, secondThrow, thirdThrow] = frame;
