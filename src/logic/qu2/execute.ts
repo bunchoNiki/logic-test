@@ -54,28 +54,16 @@ const isSpare = (firstThrow: number, secondThrow: number): boolean => {
 };
 
 /**
- * 現在のフレームまでの累計スコアの計算をする
- * @param {number} score 現在のフレームのスコア
- * @param {number} index 現在のフレーム
- * @param {number[]} scores 直近までのスコア
- * @returns {number} 現在のフレームまでの累計スコア
- */
-const cumulativeScoreCalculation = (score: number, index: number, scores: number[]): number => {
-  if (index === FIRST_FRAME) {
-    return score;
-  }
-  const [latestScore] = [...scores].reverse();
-  return latestScore + score;
-};
-
-/**
  * @param {BowlingFrames} frames 1ゲームの全フレームの配列
  * @returns {Array<number>} 各フレームのスコア
  */
 export const main = (frames: BowlingFrames): Array<number> => {
   return frames.reduce((scores, frame, index) => {
     const score = scoreCalculationOfFrame(frame, index, frames);
-    const cumulativeScore = cumulativeScoreCalculation(score, index, scores);
-    return [...scores, cumulativeScore];
+    if (index === FIRST_FRAME) {
+      return [score];
+    }
+    const [latestScore] = [...scores].reverse();
+    return [...scores, latestScore + score];
   }, [] as number[]);
 };
