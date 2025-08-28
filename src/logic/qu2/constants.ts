@@ -1,10 +1,12 @@
 export const STRIKE_BASE_SCORE = 10;
 export const SPARE_BASE_SCORE = 10;
+export const FIRST_THROW = 0;
+export const SECOND_THROW = 1;
+export const THIRD_THROW = 2;
 
 export type PinCount = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
-type Tuple<T, N extends number, R extends T[] = []> =
-  R['length'] extends N
+type Tuple<T, N extends number, R extends T[] = []> = R['length'] extends N
   ? R
   : Tuple<T, N, [...R, T]>;
 
