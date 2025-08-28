@@ -64,7 +64,7 @@ const cumulativeScoreCalculation = (score: number, index: number, scores: number
   if (index === FIRST_FRAME) {
     return score;
   }
-  const [latestScore] = scores.slice().reverse();
+  const [latestScore] = [...scores].reverse();
   return latestScore + score;
 };
 
