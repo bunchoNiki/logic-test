@@ -2,9 +2,8 @@ name: Set PR Title from README in Branch
 
 on:
   pull_request:
-    types: [opened, reopened]
-  pull_request_review:
-    types: [edited]
+    branches:
+      - 'qu**'
 
 
 permissions:
