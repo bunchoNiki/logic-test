@@ -6,7 +6,7 @@
     "spell-check": "cspell lint -c ./.cspell/cspell.cjs --gitignore --show-suggestions",
     "prepare": "node -e \"process.env.CI || require('child_process').execSync('husky', {stdio: 'inherit'})\"",
     "checked": "npx npm-run-all --parallel --continue-on-error lint:staged spell-check",
-    "node:run": "ts-node src/logic/$(git branch --show-current | cut -d'-' -f1)/execute.ts"
+    "node:run": "ts-node lib/run-by-branch.ts"
   },
   "lint-staged": {
     "src/**/*.ts": [
