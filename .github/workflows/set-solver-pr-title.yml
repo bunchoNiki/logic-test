@@ -27,15 +27,20 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           CHALLENGE_ID: ${{ steps.extract_id.outputs.id }}
-          SOLVER_NAME: $(echo "${{ github.head_ref }}" | cut -d'-' -f2-)
         run: |
+          SOLVER_NAME=$(echo "${{ github.head_ref }}" | cut -d'-' -f2-)
+
           README_PATH="README.md"
+
           if [ ! -f "$README_PATH" ]; then
             echo "README file not found at $README_PATH. Skipping title update."
             exit 0
           fi
+
           first_line=$(head -n 1 "$README_PATH")
-          challenge_title=$(echo "$first_line" | sed -E -n 's/^## 課題：(.*) $/\1/p' | xargs)
+
+          # 末尾の絵文字やスペースの有無に対応した正規表現
+          challenge_title=$(echo "$first_line" | sed -E -n 's/^## 課題：(.*)$/\1/p' | xargs)
 
           if [ -z "$challenge_title" ]; then
             echo "Could not extract title from README. Skipping title update."
