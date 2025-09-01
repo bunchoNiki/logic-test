@@ -10,7 +10,7 @@ describe('ヴィジュネル暗号 - 暗号化', () => {
   );
 });
 
-describe.skip('ヴィジュネル暗号 - 復号', () => {
+describe('ヴィジュネル暗号 - 復号', () => {
   test.each(testCases)(
     '$name の場合、正しく復号されること',
     ({ text: expected, key, expected: text }) => {
