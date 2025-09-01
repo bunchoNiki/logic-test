@@ -11,7 +11,6 @@ permissions:
 jobs:
   set_title:
     runs-on: ubuntu-latest
-    if: startsWith(github.head_ref, 'qu')
     steps:
       - name: Extract Challenge ID from branch name
         id: extract_id
