@@ -2,7 +2,10 @@ name: Set PR Title from README in Branch
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, reopened]
+  pull_request_review:
+    types: [edited]
+
 
 permissions:
   contents: read
@@ -23,7 +26,6 @@ jobs:
 
       - name: Set PR title from README
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           CHALLENGE_ID: ${{ steps.extract_id.outputs.id }}
           BRANCH_NAME: ${{ github.head_ref }}
