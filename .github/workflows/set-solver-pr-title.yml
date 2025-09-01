@@ -2,8 +2,7 @@ name: Set PR Title from README in Branch
 
 on:
   pull_request:
-  types: [opened, synchronize, reopened]
-
+    types: [opened, synchronize, reopened]
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
