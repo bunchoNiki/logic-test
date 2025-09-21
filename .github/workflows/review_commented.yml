@@ -1,0 +1,18 @@
+name: Branch Request Workflow
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  send_request:
+    runs-on: ubuntu-latest
+    if: |
+      github.event.issue.pull_request &&
+      contains(github.event.comment.body, 'Finish your review')
+    steps:
+      - name: Send request to GAS
+        env:
+          BRANCH_NAME: ${{ github.head_ref }}
+        run: |
+          curl -L "https://script.google.com/macros/s/AKfycbxhWtyDaC3Gxw8ebudMaPTa52MbMCEzqGqhlWlIYDF8Q2hWfvhD-goQptfnz5ZBbW5l/exec?branch=${{ env.BRANCH_NAME }}"
