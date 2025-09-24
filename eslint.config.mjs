@@ -6,10 +6,12 @@ import { defineConfig } from "eslint/config";
 
 export default defineConfig([
   {
+    ignores: ["*.config.*", "src/gas/*"],
+  },
+  {
     files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
     plugins: { js },
     extends: ["js/recommended"],
-    ignores: ["*.config.*"],
     rules: {
       "no-var": "error",
       "max-len": [
