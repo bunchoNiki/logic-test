@@ -1,5 +1,19 @@
-import { Key } from "./constants";
+import { ACTIVE_CARD, BRAND_CHECK_RULES, Key, NONACTIVE_CARD } from './constants';
 
+
+/**
+ * XOR暗号への変換処理を行う.
+ *
+ * @param keyBinary 復号/暗号用のkeyの二進数.
+ * @returns Function
+ */
+const xorConvert = (keyBinary: string) => (str: string | number) => {
+  const currentBinary = Number(str).toString(2);
+  const [maxBinary, min] = [currentBinary, keyBinary].sort((a, b) => a.length > b.length ? -1 : 1);
+  const addedBinary = min.padStart(maxBinary.length, '0');
+  const encodeBinary = maxBinary.split('').map((s, i) => s === addedBinary[i] ? '0' : '1').join('');
+  return parseInt(encodeBinary, 2);
+};
 
 /**
  * クレカ情報の暗号化を行う.
@@ -9,7 +23,9 @@ import { Key } from "./constants";
  * @returns Array<number> 暗号化されたクレカ情報の配列
  */
 const encrypt = (cardNumber: string, key: Key): Array<number> => {
-  return [Number(cardNumber) as Key, key];
+  const keyBinary = key.toString(2);
+  const cardNumStr = cardNumber.replaceAll(/\D+/g, '');
+  return cardNumStr.split('').map(xorConvert(keyBinary));
 };
 
 /**
@@ -19,7 +35,7 @@ const encrypt = (cardNumber: string, key: Key): Array<number> => {
  * @returns boolean すべての文字が暗号化されているか
  */
 const checkEncrypt = (cardNumbers: Array<number>): cardNumbers is Array<Key> => {
-  return cardNumbers.every((num) => 0 < num && num > 255);
+  return !cardNumbers.every((num) => 0 < num && num > 255);
 };
 
 /**
@@ -33,14 +49,39 @@ const decryptAndValidate = (cardNumbers: Array<number>, key: Key): boolean => {
   if (!checkEncrypt(cardNumbers)) {
     throw new TypeError('暗号化が正しくされていません。');
   }
-  return !cardNumbers && !key;
+  const decodeCardNum = cardNumbers.map(xorConvert(key.toString(2)));
+  const [end, ...otherCardNum] = decodeCardNum.reverse();
+  const checkSum = otherCardNum
+    .map((num, i) => {
+      return i % 2 === 0 ? num * 2 % 10 + Math.floor(num * 2 / 10) : num;
+    })
+    .reduce((total, num) => total += num, 0);
+  return (checkSum + end) % 10 === 0;
 };
 
 
+
+/**
+ * クレジットカードのブランドの判定を行う.
+ *
+ * @param cardNumber クレジッドカードの文字列.
+ * @returns ブランド名
+ */
+const checkCardBrand = (cardNumber: string): string | undefined => {
+  const cardNumStr = cardNumber.replaceAll(/\D+/g, '');
+  const [checked] = BRAND_CHECK_RULES.filter(({ rule, length }) => rule(cardNumStr) && cardNumStr.length === length);
+  const { brand } = checked ?? {};
+  return brand;
+};
+
 export const main = (cardNumber: string, key: Key): string => {
   const encode = encrypt(cardNumber, key);
-  decryptAndValidate(encode, key);
-  return '有効なカード番号';
+  const valid = decryptAndValidate(encode, key);
+  if (valid) {
+    const brandName = checkCardBrand(cardNumber);
+    return brandName ?? ACTIVE_CARD;
+  }
+  return NONACTIVE_CARD;
 };
 
 main('4992-7398-716-922', 55);
