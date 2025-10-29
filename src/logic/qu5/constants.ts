@@ -1,25 +1,25 @@
-type Enumerate<N extends number, Acc extends number[] = []> =
-  Acc['length'] extends N
+type Enumerate<
+  N extends number,
+  Acc extends number[] = []
+> = Acc['length'] extends N
   ? Acc[number]
   : Enumerate<N, [...Acc, Acc['length']]>;
 
 export type Key = Enumerate<256>;
 
-
 export const ACTIVE_CARD = '有効なカード番号';
 export const NONACTIVE_CARD = '無効なカード番号';
 
-const VISA_CARD = 'Visa';
-const MASTER_CARD = 'Mastercard';
-const AMEX_CARD = 'American Express';
-
+export const VISA_CARD = 'Visa';
+export const MASTER_CARD = 'Mastercard';
+export const AMEX_CARD = 'American Express';
 
 export type TestCase = {
   name: string;
   cardNumber: string;
-  key: Key,
-  expected: string
-}
+  key: Key;
+  expected: string;
+};
 
 export const TEST_CASES: Array<TestCase> = [
   {
@@ -51,5 +51,5 @@ export const TEST_CASES: Array<TestCase> = [
     cardNumber: '4242 4242 4242 4243',
     key: 55,
     expected: NONACTIVE_CARD,
-  }
+  },
 ];
