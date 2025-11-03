@@ -13,6 +13,11 @@ const VISA_CARD = 'Visa';
 const MASTER_CARD = 'Mastercard';
 const AMEX_CARD = 'American Express';
 
+export const CARD_BRAND_RULES = [
+  { name: VISA_CARD, start: [4], length: 16 },
+  { name: MASTER_CARD, start: [51, 52, 53, 54, 55], length: 16 },
+  { name: AMEX_CARD, start: [34, 37], length: 15 }
+];
 
 export type TestCase = {
   name: string;
