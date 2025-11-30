@@ -1,16 +1,5 @@
-/**
- * ファイルシステムのツリー構造を表す再帰的な型。
- *
- * - `files`: そのディレクトリ直下のファイル名の配列 (オプション)。
- * - `[directoryName: string]`: サブディレクトリ名。値は再び `FileSystemTree` 型。
- *
- * インデックスシグネチャ `[key: string]` が `files` プロパティの型 (`string[]`) と
- * 競合しないように、共用体型 (`|`) で定義しています。
- */
-export type FileSystemTree = {
-  files?: string[];
-  [directoryName: string]: FileSystemTree | string[] | undefined;
-};
+import { FileSystemResult, FileSystemTree } from "./constants";
+
 
 /**
  * ファイルパスのリストを受け取り、ツリー構造とエラーリストを返す。
@@ -18,6 +7,45 @@ export type FileSystemTree = {
  * @param paths ファイルパスの配列。
  * @returns 構築されたツリー構造と発生したエラーのリストを含むオブジェクト。
  */
-export const main = (paths: string[]): { tree: FileSystemTree; errors: string[] } => {
-  return { tree: paths.reduce((o,s) => ({ ...o, [s]: s}), {}), errors: [] };
+export const main = (paths: string[]): FileSystemResult => {
+  const tree: FileSystemTree = {};
+  const errors: string[] = [];
+
+  for (const path of paths) {
+    const parts = path.split('/').filter((p) => p !== '');
+    let current = tree;
+
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i];
+      const isFile = part.includes('.');
+
+      if (isFile) {
+        const existingDir = current[part];
+        if (existingDir && typeof existingDir !== 'undefined') {
+          errors.push(`Invalid path: ${path}`);
+          break;
+        }
+
+        if (!current.files) {
+          current.files = [];
+        }
+
+        if (!current.files.includes(part)) {
+          current.files.push(part);
+        }
+      } else {
+        if (current.files && current.files.includes(part)) {
+          errors.push(`Invalid path: ${path}`);
+          break;
+        }
+
+        if (!current[part]) {
+          current[part] = {};
+        }
+        current = current[part] as FileSystemTree;
+      }
+    }
+  }
+
+  return { tree, errors };
 };
