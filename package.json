@@ -11,7 +11,8 @@
   "lint-staged": {
     "src/**/*.ts": [
       "eslint --fix --max-warnings 0",
-      "npm run spell-check"
+      "npm run spell-check",
+      "bash -c 'tsc --noEmit'"
     ]
   },
   "devDependencies": {
